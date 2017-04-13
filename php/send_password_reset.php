@@ -18,7 +18,7 @@ if (isset($_POST['email'])) {
     // breaking these rules.
     //
 
-    $prep_stmt = "SELECT id FROM members WHERE email = ? LIMIT 1";
+    $prep_stmt = "SELECT user_id FROM users WHERE email = ? LIMIT 1";
     $stmt = $mysqli->prepare($prep_stmt);
 
     if ($stmt) {
@@ -49,7 +49,7 @@ if (isset($_POST['email'])) {
         // Create salted password
         $password = hash('sha512', $random_pass . $random_salt);
         //update with randomPass, set newPass to 1 to force user to update password
-        if ($update_stmt = $mysqli->prepare("UPDATE members set password='" . $password . "', salt='" . $random_salt . "' where email='" . $email . "'" )) {
+        if ($update_stmt = $mysqli->prepare("UPDATE users set password='" . $password . "', salt='" . $random_salt . "' where email='" . $email . "'" )) {
 //            $insert_stmt->bind_param('ssss', $username, $email, $password, $random_salt);
             // Execute the prepared query.
             if (! $update_stmt->execute()) {

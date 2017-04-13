@@ -29,7 +29,13 @@ $bLogged = login_check($mysqli) ;
         <link rel="stylesheet" href="css/error.css" />
         <link rel="stylesheet" href="css/reset.css"/>
         <link rel="stylesheet" href="css/style.css"/>
-        <script type="text/JavaScript" src="js/sha512.js"></script> 
+
+        <link type="text/css" rel="stylesheet" href="css/jquery.dropdown.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+        <script type="text/javascript" src="js/jquery.dropdown.js"></script>
+
+        <script type="text/JavaScript" src="js/sha512.js"></script>
         <script type="text/JavaScript" src="js/forms.js"></script>
         <!-- <script type= "text/JavaScript" src="js/modernizr.js"></script> <!-- Modernizr -->
     </head>
@@ -38,11 +44,11 @@ $bLogged = login_check($mysqli) ;
         <!-- <div id="logo"><a href="#0"><img src="img/cd-logo.svg" alt="Logo"></a></div> -->
 
         <nav class="main-nav">
-            <ul>
+            <ul style="display:block">
                 <!-- insert more links here -->
                 <li <?php if($bLogged): echo 'style="display:none;"'; endif; ?>><a class="cd-signin" href="#0" id="signin">Sign in</a></li>
                 <li <?php if($bLogged): echo 'style="display:none;"'; endif; ?>><a class="cd-signup" href="#0" id="signup">Sign up</a></li>
-                <li <?php if(!$bLogged): echo 'style="display:none;"'; endif; ?>><label id="cd-username"><?php if($bLogged) {echo htmlentities($_SESSION['username']);} ?></label></li>
+                <li <?php if(!$bLogged): echo 'style="display:none;"'; endif; ?>><span class="example" data-jq-dropdown="#jq-dropdown-1"><?php if($bLogged) {echo htmlentities($_SESSION['email']);} ?></span></li>
                 <li <?php if(!$bLogged): echo 'style="display:none;"'; endif; ?>><a class="cd-signout" href="#0" id="signout">Sign out</a></li>
             </ul>
         </nav>
@@ -152,7 +158,12 @@ $bLogged = login_check($mysqli) ;
             echo '<p class="error">User:' . $_GET["reg"] . ' registered </p>';
         }
     ?>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="js/main.js"></script>
+
+    <div id="jq-dropdown-1" class="jq-dropdown jq-dropdown-tip">
+        <div class="jq-dropdown-panel">
+            <a href="user_profile.php"/>Profile</a>
+        </div>
+    </div>
     </body>
 </html>

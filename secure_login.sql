@@ -1,66 +1,81 @@
--- phpMyAdmin SQL Dump
--- version 3.4.10.1deb1
--- http://www.phpmyadmin.net
---
--- Host: localhost
--- Generation Time: Dec 03, 2013 at 03:03 PM
--- Server version: 5.5.34
--- PHP Version: 5.3.10-1ubuntu3.8
--- https://github.com/peredurabefrog/phpSecureLogin
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema secure_login
+-- -----------------------------------------------------
+DROP SCHEMA IF EXISTS `secure_login` ;
+
+-- -----------------------------------------------------
+-- Schema secure_login
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `secure_login` DEFAULT CHARACTER SET latin1 ;
+USE `secure_login` ;
+
+-- -----------------------------------------------------
+-- Table `secure_login`.`login_attempts`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `secure_login`.`login_attempts` ;
+
+CREATE TABLE IF NOT EXISTS `secure_login`.`login_attempts` (
+  `user_id` INT(11) NOT NULL,
+  `time` VARCHAR(30) NOT NULL)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
 
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+-- -----------------------------------------------------
+-- Table `secure_login`.`user_profile`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `secure_login`.`user_profile` ;
 
---
--- Database: `secure_login`
---
+CREATE TABLE IF NOT EXISTS `secure_login`.`user_profile` (
+  `user_id` INT(11) NOT NULL,
+  `salutation` VARCHAR(5) NULL DEFAULT NULL,
+  `first_name` VARCHAR(45) NULL DEFAULT NULL,
+  `middle_initial` VARCHAR(2) NULL DEFAULT NULL,
+  `last_name` VARCHAR(45) NULL DEFAULT NULL,
+  `suffix` VARCHAR(5) NULL DEFAULT NULL,
+  `date_of_birth` DATETIME NULL DEFAULT NULL,
+  `address_1` VARCHAR(45) NULL DEFAULT NULL,
+  `address_2` VARCHAR(45) NULL DEFAULT NULL,
+  `unit_no` VARCHAR(7) NULL DEFAULT NULL,
+  `city` VARCHAR(45) NULL DEFAULT NULL,
+  `state` VARCHAR(2) NULL DEFAULT NULL,
+  `zip_code` VARCHAR(10) NULL DEFAULT NULL,
+  `country` VARCHAR(45) NULL DEFAULT NULL,
+  `county` VARCHAR(45) NULL DEFAULT NULL,
+  `created` DATETIME NULL DEFAULT NULL,
+  `updated` DATETIME NULL DEFAULT NULL,
+  PRIMARY KEY (`user_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
 
--- --------------------------------------------------------
 
---
--- Table structure for table `login_attempts`
---
+-- -----------------------------------------------------
+-- Table `secure_login`.`users`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `secure_login`.`users` ;
 
-CREATE TABLE IF NOT EXISTS `login_attempts` (
-  `user_id` int(11) NOT NULL,
-  `time` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE IF NOT EXISTS `secure_login`.`users` (
+  `user_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(30) NOT NULL,
+  `email` VARCHAR(50) NOT NULL,
+  `password` CHAR(128) NOT NULL,
+  `salt` CHAR(128) NOT NULL,
+  `newpass` TINYINT(4) NULL DEFAULT '0',
+  PRIMARY KEY (`user_id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 12
+DEFAULT CHARACTER SET = latin1;
 
---
--- Dumping data for table `login_attempts`
---
 
-INSERT INTO `login_attempts` (`user_id`, `time`) VALUES
-(1, '1385995353'),
-(1, '1386011064');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `members`
---
-
-CREATE TABLE IF NOT EXISTS `members` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(30) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `password` char(128) NOT NULL,
-  `salt` char(128) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
-
---
--- Dumping data for table `members`
---
-
-INSERT INTO `members` (`id`, `username`, `email`, `password`, `salt`) VALUES
-(1, 'test_user', 'test@example.com', '00807432eae173f652f2064bdca1b61b290b52d40e429a7d295d76a71084aa96c0233b82f1feac45529e0726559645acaed6f3ae58a286b9f075916ebf66cacc', 'f9aab579fc1b41ed0c44fe4ecdbfcdb4cb99b9023abb241a6db833288f4eea3c02f76e0d35204a8695077dcf81932aa59006423976224be0390395bae152d4ef');
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

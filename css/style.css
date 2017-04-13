@@ -178,12 +178,11 @@ header[role=banner]::after {
     border: none;
   }
 
-  /*
-  .main-nav label.cd-username {
+  .main-nav a.cd-username {
     background: #d2d8d8;
     color: #000000;
   }
-  */
+
 }
 
 /* -------------------------------- 
@@ -285,7 +284,7 @@ xsigin/signup popup
   margin: 1.4em 0;
 }
 .cd-form .fieldset:first-child {
-  margin-top: 0;
+  margin-top: 1em;
 }
 .cd-form .fieldset:last-child {
   margin-bottom: 0;
@@ -293,6 +292,10 @@ xsigin/signup popup
 .cd-form label {
   font-size: 14px;
   font-size: 0.875rem;
+}
+
+.cd-form label.top-padding {
+  padding: 20px 0px 0px 0px;
 }
 .cd-form label.image-replace {
   /* replace text with an icon */
@@ -332,6 +335,9 @@ xsigin/signup popup
 }
 .cd-form input.full-width {
   width: 100%;
+}
+.cd-form input.left-padding {
+  padding: 0px 0px 0px 5px;
 }
 .cd-form input.has-padding {
   padding: 12px 20px 12px 50px;
@@ -430,6 +436,9 @@ xsigin/signup popup
   -moz-transition: opacity 0.2s 0, visibility 0 0;
   transition: opacity 0.2s 0, visibility 0 0;
 }
+.cd-form .top-spacer {
+  margin-top: 1em;
+}
 @media only screen and (min-width: 600px) {
   .cd-form {
     padding: 2em;
@@ -438,7 +447,7 @@ xsigin/signup popup
     margin: 2em 0;
   }
   .cd-form .fieldset:first-child {
-    margin-top: 0;
+    margin-top: 1em;
   }
   .cd-form .fieldset:last-child {
     margin-bottom: 0;

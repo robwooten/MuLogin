@@ -39,14 +39,14 @@ function sec_session_start() {
     // Sets the session name to the one set above.
     session_name($session_name);
 
-    if (session_status() != PHP_SESSION_ACTIVE) {session_start();}            // Start the PHP session
+    session_start();            // Start the PHP session
     session_regenerate_id();    // regenerated the session, delete the old one. 
 }
 
 function login($email, $password, $mysqli) {
     // Using prepared statements means that SQL injection is not possible. 
-    if ($stmt = $mysqli->prepare("SELECT id, username, password, salt 
-				  FROM members 
+    if ($stmt = $mysqli->prepare("SELECT user_id, username, password, salt
+				  FROM users
                                   WHERE email = ? LIMIT 1")) {
         $stmt->bind_param('s', $email);  // Bind "$email" to parameter.
         $stmt->execute();    // Execute the prepared query.
@@ -81,6 +81,7 @@ function login($email, $password, $mysqli) {
                     $username = preg_replace("/[^a-zA-Z0-9_\-]+/", "", $username);
 
                     $_SESSION['username'] = $username;
+                    $_SESSION['email'] = $email;
                     $_SESSION['login_string'] = hash('sha512', $password . $user_browser);
 
                     // Login successful. 
@@ -149,8 +150,8 @@ function login_check($mysqli) {
         $user_browser = $_SERVER['HTTP_USER_AGENT'];
 
         if ($stmt = $mysqli->prepare("SELECT password 
-				      FROM members 
-				      WHERE id = ? LIMIT 1")) {
+				      FROM users
+				      WHERE user_id = ? LIMIT 1")) {
             // Bind "$user_id" to parameter. 
             $stmt->bind_param('i', $user_id);
             $stmt->execute();   // Execute the prepared query.
@@ -181,6 +182,71 @@ function login_check($mysqli) {
     } else {
         // Not logged in 
         return false;
+    }
+}
+
+function getUserProfile($mysqli)
+{
+    $sql="SELECT * FROM user_profile where user_id=" . $_SESSION['user_id'];
+    return $mysqli->query($sql);
+}
+
+function updateProfile($mysqli) {
+    if(isset( $_POST['profile-firstname'])) {
+        $user_id = $_SESSION['user_id'];
+
+        $sql = "SELECT * FROM user_profile WHERE user_id = " . $user_id;
+        if ($result = $mysqli->query($sql)) {
+            $rowCnt = mysqli_num_rows($result);
+            if ($rowCnt == 0) { //no row, do insert
+                $sql = "INSERT into user_profile (user_id, salutation, first_name, middle_initial, last_name, suffix, address_1, address_2, unit_no, city, state, zip_code)"
+                        . "VALUES (".$user_id.","
+                        . "'" . $_POST['profile-salutation'] . "',"
+                        . "'" . $_POST['profile-firstname'] . "',"
+                        . "'" . $_POST['profile-middle-initial'] . "',"
+                        . "'" . $_POST['profile-lastname'] . "',"
+                        . "'" . $_POST['profile-suffix'] . "',"
+                        . "'" . $_POST['profile-address-1'] . "',"
+                        . "'" . $_POST['profile-address-2'] . "',"
+                        . "'" . $_POST['profile-unit-no'] . "',"
+                        . "'" . $_POST['profile-city'] . "',"
+                        . "'" . $_POST['profile-state'] . "',"
+                        . "'" . $_POST['profile-zip-code'] . "'"
+                    . ")";
+            } elseif ($rowCnt == 1) { //have profile, update
+                $sql = "UPDATE user_profile "
+                    . "set salutation='" . $_POST['profile-salutation'] . "',"
+                    . " first_name='" . $_POST['profile-firstname'] . "',"
+                    . " middle_initial='" . $_POST['profile-middle-initial'] . "',"
+                    . " last_name='" . $_POST['profile-lastname'] . "',"
+                    . " suffix='" . $_POST['profile-suffix'] . "',"
+                    . " address_1='" . $_POST['profile-address-1'] . "',"
+                    . " address_2='" . $_POST['profile-address-2'] . "',"
+                    . " unit_no='" . $_POST['profile-unit-no'] . "',"
+                    . " city='" . $_POST['profile-city'] . "',"
+                    . " state='" . $_POST['profile-state'] . "',"
+                    . " zip_code='" . $_POST['profile-zip-code'] . "'"
+                    . " WHERE user_id=" . $user_id;
+
+            } else { //start checking primary/secondary, etc.... profile
+
+            }
+            error_log("SQL: " . $sql);
+
+            if($mysqli->query($sql) == TRUE) {
+                //insert/update was successful
+            } else {
+                error_log($mysqli->error);
+            }
+        }
+        else
+        {
+            error_log($mysqli->error);
+        }
+    }
+    else {
+        error_log("update profile post data missing");
+        //need more data?
     }
 }
 
